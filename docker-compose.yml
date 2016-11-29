@@ -5,7 +5,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./public:/var/www
+      - ./:/var/www
 
   db:
     image: mysql:5.7
