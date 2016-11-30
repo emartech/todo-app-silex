@@ -1,2 +1,2 @@
 USE todo;
-INSERT INTO todo_lista (title, completed) VALUES ('example 1', FALSE), ('item', TRUE);
+INSERT INTO todo_list (title, completed) VALUES ('example 1', FALSE), ('item', TRUE);
