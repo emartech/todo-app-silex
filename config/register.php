@@ -5,6 +5,7 @@ function registerDb(Silex\Application $app)
 {
   global $dbParams;
 
+  $app->register(new Silex\Provider\ServiceControllerServiceProvider());
   $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     'db.options' => $dbParams
   ));
@@ -23,4 +24,5 @@ function registerDb(Silex\Application $app)
       ]
     ]
   ]);
+  
 }
