@@ -11,4 +11,6 @@ function registerDb(Silex\Application $app)
       'charset' => 'utf8'
     )
   ));
+
+  $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 }

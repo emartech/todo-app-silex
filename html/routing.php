@@ -1,24 +1,17 @@
 <?php
 
+require_once 'controllers/todo_controller.php';
+
 function setRouting(Silex\Application $app)
 {
-  $app->get('', function() use ($app)
+  $app['controller.todo'] = function() use($app)
   {
-    $html = '';
-    $todos = $app['db']->fetchAll('SELECT * FROM todo_lista');
-    foreach($todos as $todo)
-    {
-      $html.=$todo['title'];
-    }
-    return $html;
-  });
+    return new TodoController($app['db']);
+  };
 
-  $app->delete('/api/todo/{id}', function($id) use ($app)
-  {
-    $sql = 'DELETE FROM todo_lista WHERE id=?';
-    $app['db']->executeQuery($sql, array($id));
-    return 'success';
-  });
+  $app->get('', "controller.todo:listTodos");
+
+  $app->delete('/api/todo/{id}', "controller.todo:deleteTodo");
 
   $app->post('/api/todo', function() use($app) {
     $req = $app['request_stack']->getCurrentRequest();
