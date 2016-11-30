@@ -12,7 +12,7 @@ class TodoController
   public function listTodos()
   {
     $html = '';
-    $todos = $this->db->fetchAll('SELECT * FROM todo_lista');
+    $todos = $this->db->fetchAll('SELECT * FROM todo_list');
     foreach($todos as $todo)
     {
       $html.=$todo['title'];
@@ -22,7 +22,7 @@ class TodoController
 
   public function deleteTodo($id)
   {
-    $sql = 'DELETE FROM todo_lista WHERE id=?';
+    $sql = 'DELETE FROM todo_list WHERE id=?';
     $this->db->executeQuery($sql, array($id));
     return 'success';
   }
