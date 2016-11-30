@@ -13,7 +13,8 @@ function setRouting(Silex\Application $app)
 
   $app->delete('/api/todo/{id}', "controller.todo:deleteTodo");
 
-  $app->post('/api/todo', function() use($app) {
+  $app->post('/api/todo', function() use($app)
+  {
     $req = $app['request_stack']->getCurrentRequest();
     $sql = 'INSERT INTO todo_lista (title, completed) VALUES (?, false)';
     $title = $req->request->get('title');
