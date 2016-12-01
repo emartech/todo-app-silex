@@ -1,0 +1,7 @@
+{% for todo in todos %}
+  <li>{{ todo.title }}</li>
+{% endfor %}
+
+{{ form_start(form) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}

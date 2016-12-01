@@ -1,6 +1,8 @@
 <?php
 
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 require_once 'controllers/todo_controller.php';
+require_once 'controllers/api_controller.php';
 
 function setRouting(Silex\Application $app)
 {
@@ -9,13 +11,30 @@ function setRouting(Silex\Application $app)
     return new TodoController
     (
       $app['request_stack']->getCurrentRequest(),
+      $app['db'],
+      function($data) use ($app) {
+        return $app['form.factory']->createBuilder(FormType::class, $data);
+      },
+      function ($template, $scope) use ($app) {
+        return $app['twig']->render($template, $scope);
+      }
+    );
+  };
+
+  $app['controller.api'] = function() use($app)
+  {
+    return new ApiController
+    (
+      $app['request_stack']->getCurrentRequest(),
       $app['db']
     );
   };
 
-  $app->get('', "controller.todo:listTodos");
+  $app->delete('/api/todo/{id}', "controller.api:deleteTodo");
 
-  $app->delete('/api/todo/{id}', "controller.todo:deleteTodo");
+  $app->post('/api/todo', "controller.api:insertTodo");
 
-  $app->post('/api/todo', "controller.todo:insertTodo");
+  $app->get('', "controller.todo:renderTodos");
+
+  $app->post('', "controller.todo:insertTodo");
 }
