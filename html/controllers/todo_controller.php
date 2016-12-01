@@ -28,7 +28,9 @@ class TodoController
     $factory = $this->formBuilderFactory;
 
     return $factory($data)
-      ->add('title', TextType::class)
+      ->add('title', TextType::class, array(
+        'constraints' => array(new Assert\Length(array('min' => 2)))
+      ))
       ->add('save', SubmitType::class, array('label' => 'add todo'))
       ->getForm();
   }
