@@ -11,7 +11,7 @@ function setRouting(Silex\Application $app)
     return new TodoController
     (
       $app['request_stack']->getCurrentRequest(),
-      $app['db'],
+      $app['orm.em'],
       function($data) use ($app) {
         return $app['form.factory']->createBuilder(FormType::class, $data);
       },
@@ -20,21 +20,19 @@ function setRouting(Silex\Application $app)
       }
     );
   };
+  
+  $app->get('', "controller.todo:renderTodos");
+  $app->post('', "controller.todo:insertTodo");
 
   $app['controller.api'] = function() use($app)
   {
     return new ApiController
     (
       $app['request_stack']->getCurrentRequest(),
-      $app['db']
+      $app['orm.em']
     );
   };
 
   $app->delete('/api/todo/{id}', "controller.api:deleteTodo");
-
   $app->post('/api/todo', "controller.api:insertTodo");
-
-  $app->get('', "controller.todo:renderTodos");
-
-  $app->post('', "controller.todo:insertTodo");
 }

@@ -4,28 +4,34 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class ApiController
 {
-  protected $db;
+  protected $em;
   protected $request;
 
-  public function __construct($request, $db)
+  public function __construct($request, $em)
   {
-    $this->db = $db;
+    $this->em = $em;
     $this->request = $request;
   }
 
   public function deleteTodo($id)
   {
-    $sql = 'DELETE FROM todo_list WHERE id=?';
-    $this->db->executeQuery($sql, array($id));
+    $todo = $this->em->find('Entities\TodoList', $id);
+    
+    if($todo){
+      $this->em->remove($todo);
+      $this->em->flush();
+    }
+    
     return 'success';
   }
 
   public function insertTodo()
   {
-    $sql = 'INSERT INTO todo_list (title, completed) VALUES (?, false)';
-    $title = $this->request->get('title');
+    $todo = new Entities\TodoList();
+    $todo->setTitle($this->request->get('title'));
+    $this->em->persist($todo);
+    $this->em->flush();
 
-    $this->db->executeQuery($sql, array($title));
-    return 'Success';
+    return 'success';
   }
 }

@@ -6,14 +6,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class TodoController
 {
-  protected $db;
+  protected $em;
   protected $request;
   protected $formBuilderFactory;
   protected $render;
 
-  public function __construct($request, $db, $formBuilderFactory, $render)
+  public function __construct($request, $em, $formBuilderFactory, $render)
   {
-    $this->db = $db;
+    $this->em = $em;
     $this->request = $request;
     $this->formBuilderFactory = $formBuilderFactory;
     $this->render = $render;
@@ -43,7 +43,7 @@ class TodoController
 
   private function listTodos()
   {
-    return $this->db->fetchAll('SELECT * FROM todo_list');
+    return $this->em->getRepository('Entities\TodoList')->findAll();
   }
 
   public function insertTodo()

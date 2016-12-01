@@ -13,6 +13,7 @@ function registerDb(Silex\Application $app)
 
   $app->register(new Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider,
   [
+    'orm.proxies_dir' => '../cache/doctrine-proxies',
     'orm.em.options' => [
       'mappings' => [
         [

@@ -12,5 +12,8 @@
         "symfony/config": "^3.2",
         "symfony/translation": "^3.2",
         "symfony/twig-bridge": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {"Entities\\": "orm/"}
     }
 }
