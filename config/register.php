@@ -24,5 +24,14 @@ function registerDb(Silex\Application $app)
     ]
   ]);
 
+  $app->register(new Silex\Provider\LocaleServiceProvider());
+  $app->register(new Silex\Provider\TranslationServiceProvider(), array(
+    'locale_fallbacks' => array('en'),
+  ));
+
+  $app->register(new Silex\Provider\TwigServiceProvider, array(
+    'twig.path' => __DIR__ .'/../html/views',
+  ));
+
   $app->register(new Silex\Provider\FormServiceProvider);
 }

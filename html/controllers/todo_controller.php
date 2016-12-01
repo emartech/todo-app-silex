@@ -1,40 +1,61 @@
 <?php
 
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints as Assert;
+
 class TodoController
 {
   protected $db;
   protected $request;
+  protected $formBuilderFactory;
+  protected $render;
 
-  public function __construct($request, $db)
+  public function __construct($request, $db, $formBuilderFactory, $render)
   {
     $this->db = $db;
     $this->request = $request;
+    $this->formBuilderFactory = $formBuilderFactory;
+    $this->render = $render;
   }
 
-  public function listTodos()
+  private function generateForm()
   {
-    $html = '';
-    $todos = $this->db->fetchAll('SELECT * FROM todo_list');
-    foreach($todos as $todo)
-    {
-      $html.=$todo['title'];
-    }
-    return $html;
+    $data = array(
+      'title' => ''
+    );
+
+    $factory = $this->formBuilderFactory;
+
+    return $factory($data)
+      ->add('title', TextType::class)
+      ->add('save', SubmitType::class, array('label' => 'add todo'))
+      ->getForm();
   }
 
-  public function deleteTodo($id)
+  public function renderTodos()
   {
-    $sql = 'DELETE FROM todo_list WHERE id=?';
-    $this->db->executeQuery($sql, array($id));
-    return 'success';
+    return ($this->render)('index.twig', array(
+      'form' => $this->generateForm()->createView(),
+      'todos' => $this->listTodos()
+    ));
+  }
+
+  private function listTodos()
+  {
+    return $this->db->fetchAll('SELECT * FROM todo_list');
   }
 
   public function insertTodo()
   {
-    $sql = 'INSERT INTO todo_list (title, completed) VALUES (?, false)';
-    $title = $this->request->get('title');
+    $form = $this->generateForm();
+    $form->handleRequest($this->request);
 
-    $this->db->executeQuery($sql, array($title));
-    return 'Success';
+    if ($form->isValid())
+    {
+      $data = $form->getData();
+      return 'Success';
+    }
+    return 'Failed';
   }
 }
