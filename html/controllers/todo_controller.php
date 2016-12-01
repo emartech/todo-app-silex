@@ -54,6 +54,12 @@ class TodoController
     if ($form->isValid())
     {
       $data = $form->getData();
+
+      $todo = new Entities\TodoList;
+      $todo->setTitle($data['title']);
+      $this->em->persist($todo);
+      $this->em->flush();
+
       return 'Success';
     }
     return 'Failed';
