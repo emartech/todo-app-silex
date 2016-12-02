@@ -12,16 +12,12 @@ function setRouting(Silex\Application $app)
     (
       $app['request_stack']->getCurrentRequest(),
       $app['orm.em'],
-      function($data) use ($app) {
-        return $app['form.factory']->createBuilder(FormType::class, $data);
-      },
-      function ($template, $scope) use ($app) {
-        return $app['twig']->render($template, $scope);
-      }
+      $app['form.factory'],
+      $app['twig']
     );
   };
   
-  $app->get('', "controller.todo:renderTodos");
+  $app->get('', "controller.todo:generateIndexHtml");
   $app->post('', "controller.todo:insertTodo");
 
   $app['controller.api'] = function() use($app)

@@ -2,21 +2,22 @@
 
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class TodoController
 {
   protected $em;
   protected $request;
-  protected $formBuilderFactory;
-  protected $render;
+  protected $formFactory;
+  protected $twig;
 
-  public function __construct($request, $em, $formBuilderFactory, $render)
+  public function __construct($request, $em, $formFactory, $twig)
   {
     $this->em = $em;
     $this->request = $request;
-    $this->formBuilderFactory = $formBuilderFactory;
-    $this->render = $render;
+    $this->formFactory = $formFactory;
+    $this->twig = $twig;
   }
 
   private function generateForm()
@@ -25,9 +26,7 @@ class TodoController
       'title' => ''
     );
 
-    $factory = $this->formBuilderFactory;
-
-    return $factory($data)
+    return $this->formFactory->createBuilder(FormType::class, $data)
       ->add('title', TextType::class, array(
         'constraints' => array(new Assert\Length(array('min' => 2)))
       ))
@@ -35,11 +34,16 @@ class TodoController
       ->getForm();
   }
 
-  public function renderTodos()
+  public function generateIndexHtml()
   {
-    return ($this->render)('index.twig', array(
-      'form' => $this->generateForm()->createView(),
-      'todos' => $this->listTodos()
+    return $this->renderTodos($this->generateForm()->createView(), $this->listTodos());
+  }
+
+  public function renderTodos($form, $todos)
+  {
+    return $this->twig->render('index.twig', array(
+      'form' => $form,
+      'todos' => $todos
     ));
   }
 
