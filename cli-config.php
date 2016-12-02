@@ -2,7 +2,7 @@
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 
 // replace with file to your own project bootstrap
-require_once 'config/bootstrap.php';
+require_once 'src/bootstrap.php';
 
 $helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
     'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($entityManager->getConnection()),

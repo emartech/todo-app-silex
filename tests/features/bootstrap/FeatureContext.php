@@ -8,7 +8,7 @@ use \PHPUnit_Framework_Assert as Assert;
 /**
  * Features context.
  */
-class APIContext implements SnippetAcceptingContext
+class FeatureContext implements SnippetAcceptingContext
 {
   /**
    * @var Api\Application
