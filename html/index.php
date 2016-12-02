@@ -6,7 +6,7 @@ require_once '../config/routing.php';
 $app = new Silex\Application();
 $app['debug'] = true;
 
-registerDb($app);
+registerServices($app);
 setRouting($app);
 
 $app->run();

@@ -1,7 +1,7 @@
 <?php
 require_once 'bootstrap.php';
 
-function registerDb(Silex\Application $app)
+function registerServices(Silex\Application $app)
 {
   global $dbParams;
 
