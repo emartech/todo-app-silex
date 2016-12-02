@@ -1,12 +1,8 @@
 <?php
 require_once '../vendor/autoload.php';
-require_once '../config/register.php';
-require_once '../config/routing.php';
+require_once '../src/app.php';
 
-$app = new Silex\Application();
+$app = new Application();
 $app['debug'] = true;
-
-registerServices($app);
-setRouting($app);
 
 $app->run();

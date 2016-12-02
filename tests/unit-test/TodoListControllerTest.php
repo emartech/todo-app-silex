@@ -1,5 +1,5 @@
 <?php
-require 'html/controllers/todo_controller.php';
+require 'src/controllers/todo_controller.php';
 
 class DummyTwigClass {
     public function render($template, $params){ }
